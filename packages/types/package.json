@@ -1,0 +1,19 @@
+{
+  "name": "@the-falcon/types",
+  "version": "0.0.1",
+  "description": "Shared TypeScript types for BeReal Clone backend services",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js"
+    }
+  }
+}

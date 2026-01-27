@@ -1,0 +1,125 @@
+# Local Development - Infrastructure Only
+# Services run natively on Mac, infrastructure runs in Docker
+# Usage: docker-compose -f docker-compose.local.yml up -d
+
+services:
+  # ===================
+  # Database
+  # ===================
+  
+  # PostgreSQL database (single instance, multiple databases)
+  db:
+    image: postgres:15-alpine
+    container_name: falcon-local-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_MULTIPLE_DATABASES: >-
+        auth_db:auth_user:auth_password,
+        feed_db:feed_user:feed_password,
+        media_db:media_user:media_password,
+        notifications_db:notifications_user:notifications_password
+    volumes:
+      - local-db-data:/var/lib/postgresql/data
+      - ./scripts/init-multiple-dbs.sh:/docker-entrypoint-initdb.d/init-multiple-dbs.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - falcon-local
+
+  # ===================
+  # Cache
+  # ===================
+  
+  redis:
+    image: redis:7-alpine
+    container_name: falcon-local-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - local-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - falcon-local
+
+  # ===================
+  # Service Discovery
+  # ===================
+  
+  consul:
+    image: hashicorp/consul:1.15
+    container_name: falcon-local-consul
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    command: "agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0 -bind=0.0.0.0"
+    healthcheck:
+      test: ["CMD", "consul", "members"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - falcon-local
+
+  # ===================
+  # Message Broker
+  # ===================
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: falcon-local-rabbitmq
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - falcon-local
+
+  # ===================
+  # Optional: S3-compatible storage (MinIO)
+  # ===================
+  
+  minio:
+    image: minio/minio:latest
+    container_name: falcon-local-minio
+    ports:
+      - "9000:9000"      # API
+      - "9001:9001"      # Console
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - local-minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - falcon-local
+
+networks:
+  falcon-local:
+    driver: bridge
+
+volumes:
+  local-db-data:
+  local-redis-data:
+  local-minio-data:

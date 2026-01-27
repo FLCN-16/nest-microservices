@@ -1,0 +1,24 @@
+{
+  "roles": {
+    "user": [
+      "read:feed",
+      "create:post",
+      "read:post",
+      "update:post",
+      "delete:post",
+      "read:comment",
+      "create:comment",
+      "read:media"
+    ],
+    "moderator": [
+      "read:all",
+      "update:all",
+      "create:post",
+      "delete:post",
+      "delete:comment"
+    ],
+    "admin": [
+      "manage:all"
+    ]
+  }
+}
