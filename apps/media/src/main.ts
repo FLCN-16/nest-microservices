@@ -3,10 +3,7 @@ import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { MediaModule } from './media.module';
 import { Logger, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  AllExceptionsFilter,
-  LoggingInterceptor,
-} from '@the-falcon/common';
+import { AllExceptionsFilter, LoggingInterceptor } from '@the-falcon/common';
 
 async function bootstrap() {
   const logger = new Logger('MediaService');
@@ -28,7 +25,9 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: configService.get<string>('ALLOWED_ORIGINS', 'http://localhost:3000').split(','),
+    origin: configService
+      .get<string>('ALLOWED_ORIGINS', 'http://localhost:3000')
+      .split(','),
     credentials: true,
   });
 

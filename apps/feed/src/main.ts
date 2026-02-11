@@ -3,10 +3,7 @@ import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { FeedModule } from './feed.module';
 import { ValidationPipe, Logger, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  AllExceptionsFilter,
-  LoggingInterceptor,
-} from '@the-falcon/common';
+import { AllExceptionsFilter, LoggingInterceptor } from '@the-falcon/common';
 
 async function bootstrap() {
   const logger = new Logger('FeedService');
@@ -29,7 +26,9 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors({
-    origin: configService.get<string>('ALLOWED_ORIGINS', 'http://localhost:3000').split(','),
+    origin: configService
+      .get<string>('ALLOWED_ORIGINS', 'http://localhost:3000')
+      .split(','),
     credentials: true,
   });
 

@@ -3,10 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { NotificationsModule } from './notifications.module';
-import {
-  AllExceptionsFilter,
-  LoggingInterceptor,
-} from '@the-falcon/common';
+import { AllExceptionsFilter, LoggingInterceptor } from '@the-falcon/common';
 
 async function bootstrap() {
   const logger = new Logger('NotificationsService');
@@ -15,7 +12,10 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const httpPort = configService.get<number>('PORT', 4004);
-  const rabbitmqUrl = configService.get<string>('RABBITMQ_URL', 'amqp://guest:guest@localhost:5672');
+  const rabbitmqUrl = configService.get<string>(
+    'RABBITMQ_URL',
+    'amqp://guest:guest@localhost:5672',
+  );
 
   // Global filters and interceptors
   app.useGlobalFilters(new AllExceptionsFilter());
@@ -39,7 +39,9 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: configService.get<string>('ALLOWED_ORIGINS', 'http://localhost:3000').split(','),
+    origin: configService
+      .get<string>('ALLOWED_ORIGINS', 'http://localhost:3000')
+      .split(','),
     credentials: true,
   });
 

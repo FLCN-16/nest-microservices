@@ -3,10 +3,7 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  AllExceptionsFilter,
-  LoggingInterceptor,
-} from '@the-falcon/common';
+import { AllExceptionsFilter, LoggingInterceptor } from '@the-falcon/common';
 
 async function bootstrap() {
   const logger = new Logger('Gateway');
@@ -31,7 +28,9 @@ async function bootstrap() {
 
   // Enable CORS for all services
   app.enableCors({
-    origin: configService.get<string>('ALLOWED_ORIGINS', 'http://localhost:3000').split(','),
+    origin: configService
+      .get<string>('ALLOWED_ORIGINS', 'http://localhost:3000')
+      .split(','),
     credentials: true,
   });
 

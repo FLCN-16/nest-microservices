@@ -23,7 +23,9 @@ import * as Joi from 'joi';
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
       validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
+        NODE_ENV: Joi.string()
+          .valid('development', 'production', 'test')
+          .default('development'),
         PORT: Joi.number().default(4002),
         TCP_PORT: Joi.number().default(5002),
         FEED_DB_HOST: Joi.string().default('localhost'),
@@ -64,4 +66,4 @@ import * as Joi from 'joi';
   providers: [FeedService, FeedResolver],
 })
 // Rebuild trigger
-export class FeedModule { }
+export class FeedModule {}

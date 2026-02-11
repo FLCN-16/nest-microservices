@@ -14,7 +14,9 @@ import * as Joi from 'joi';
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
       validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
+        NODE_ENV: Joi.string()
+          .valid('development', 'production', 'test')
+          .default('development'),
         PORT: Joi.number().default(4000),
         TCP_PORT: Joi.number().default(5000),
         GATEWAY_SECRET: Joi.string().required(),
@@ -31,4 +33,4 @@ import * as Joi from 'joi';
   providers: [AppService, MicroserviceClient],
   exports: [MicroserviceClient],
 })
-export class AppModule { }
+export class AppModule {}

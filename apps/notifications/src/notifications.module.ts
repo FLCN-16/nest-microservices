@@ -18,12 +18,16 @@ import * as Joi from 'joi';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
+        NODE_ENV: Joi.string()
+          .valid('development', 'production', 'test')
+          .default('development'),
         PORT: Joi.number().default(4004),
         NOTIFICATIONS_DB_HOST: Joi.string().default('localhost'),
         NOTIFICATIONS_DB_PORT: Joi.number().default(5432),
         NOTIFICATIONS_DB_USER: Joi.string().default('notifications_user'),
-        NOTIFICATIONS_DB_PASSWORD: Joi.string().default('notifications_password'),
+        NOTIFICATIONS_DB_PASSWORD: Joi.string().default(
+          'notifications_password',
+        ),
         NOTIFICATIONS_DB_NAME: Joi.string().default('notifications_db'),
         RABBITMQ_URL: Joi.string().default('amqp://guest:guest@localhost:5672'),
         ALLOWED_ORIGINS: Joi.string().default('http://localhost:3000'),
@@ -49,4 +53,4 @@ import * as Joi from 'joi';
   controllers: [NotificationsController],
   providers: [NotificationsService],
 })
-export class NotificationsModule { }
+export class NotificationsModule {}
