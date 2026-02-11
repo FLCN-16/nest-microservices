@@ -26,9 +26,14 @@ Built on **NestJS** with **PostgreSQL** for persistence.
 
 | Environment Variable | Description |
 |----------------------|-------------|
-| `DATABASE_URL` | Postgres connection string |
+| `FEED_DB_HOST` | Postgres host (default: localhost) |
+| `FEED_DB_PORT` | Postgres port (default: 5432) |
+| `FEED_DB_USER` | Postgres username (default: feed_user) |
+| `FEED_DB_PASSWORD` | Postgres password |
+| `FEED_DB_NAME` | Postgres database name (default: feed_db) |
 | `PORT` | HTTP port (default: 4002) |
 | `TCP_PORT` | TCP port (default: 5002) |
+| `ALLOWED_ORIGINS` | Comma-separated CORS origins |
 
 ## 📦 Dependencies
 - `@nestjs/graphql` & `@nestjs/apollo`

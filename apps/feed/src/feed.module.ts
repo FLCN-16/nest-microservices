@@ -13,6 +13,7 @@ import { FeedController } from './feed.controller';
 import { FeedService } from './feed.service';
 import { FeedResolver } from './feed.resolver';
 import { Post } from './entities/post.entity';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
@@ -21,6 +22,17 @@ import { Post } from './entities/post.entity';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
+      validationSchema: Joi.object({
+        NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
+        PORT: Joi.number().default(4002),
+        TCP_PORT: Joi.number().default(5002),
+        FEED_DB_HOST: Joi.string().default('localhost'),
+        FEED_DB_PORT: Joi.number().default(5432),
+        FEED_DB_USER: Joi.string().default('feed_user'),
+        FEED_DB_PASSWORD: Joi.string().default('feed_password'),
+        FEED_DB_NAME: Joi.string().default('feed_db'),
+        ALLOWED_ORIGINS: Joi.string().default('http://localhost:3000'),
+      }),
     }),
     ConsulModule.register({
       serviceName: 'feed',
@@ -31,12 +43,12 @@ import { Post } from './entities/post.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.FEED_DB_HOST || 'localhost',
-      port: parseInt(process.env.FEED_DB_PORT || '5433'),
+      port: parseInt(process.env.FEED_DB_PORT || '5432'),
       username: process.env.FEED_DB_USER || 'feed_user',
       password: process.env.FEED_DB_PASSWORD || 'feed_password',
       database: process.env.FEED_DB_NAME || 'feed_db',
       entities: [Post],
-      synchronize: true, // Auto-create tables (dev only)
+      synchronize: process.env.NODE_ENV !== 'production',
     }),
     TypeOrmModule.forFeature([Post]),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -52,4 +64,4 @@ import { Post } from './entities/post.entity';
   providers: [FeedService, FeedResolver],
 })
 // Rebuild trigger
-export class FeedModule {}
+export class FeedModule { }

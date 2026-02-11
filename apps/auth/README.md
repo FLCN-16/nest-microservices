@@ -37,10 +37,15 @@ This service listens for the following TCP commands from other services (e.g., G
 
 | Environment Variable | Description |
 |----------------------|-------------|
-| `DATABASE_URL` | Postgres connection string |
-| `JWT_KEYS_PATH` | Path to directory containing `private_key.pem` and `public_key.pem` |
+| `DB_HOST` | Postgres host (default: localhost) |
+| `DB_PORT` | Postgres port (default: 5432) |
+| `DB_USER` | Postgres username (default: auth_user) |
+| `DB_PASSWORD` | Postgres password |
+| `DB_NAME` | Postgres database name (default: auth_db) |
+| `JWT_SECRET` | Secret key for signing JWT tokens (**required**) |
 | `PORT` | HTTP port (default: 4001) |
 | `TCP_PORT` | TCP port (default: 5001) |
+| `ALLOWED_ORIGINS` | Comma-separated CORS origins (default: http://localhost:3000) |
 
 ## 📦 Dependencies
 - `@nestjs/passport` & `passport-jwt`

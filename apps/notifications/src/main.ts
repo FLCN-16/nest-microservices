@@ -1,17 +1,30 @@
 import { Logger, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 import { NotificationsModule } from './notifications.module';
+import {
+  AllExceptionsFilter,
+  LoggingInterceptor,
+} from '@the-falcon/common';
 
 async function bootstrap() {
   const logger = new Logger('NotificationsService');
 
   const app = await NestFactory.create(NotificationsModule);
+  const configService = app.get(ConfigService);
+
+  const httpPort = configService.get<number>('PORT', 4004);
+  const rabbitmqUrl = configService.get<string>('RABBITMQ_URL', 'amqp://guest:guest@localhost:5672');
+
+  // Global filters and interceptors
+  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
-      urls: [process.env.RABBITMQ_URL || 'amqp://guest:guest@localhost:5672'],
+      urls: [rabbitmqUrl],
       queue: 'notifications_queue',
       queueOptions: {
         durable: false,
@@ -25,14 +38,16 @@ async function bootstrap() {
     defaultVersion: '1',
   });
 
-  app.enableCors(); // Allow upload from mobile/web
+  app.enableCors({
+    origin: configService.get<string>('ALLOWED_ORIGINS', 'http://localhost:3000').split(','),
+    credentials: true,
+  });
 
   await app.startAllMicroservices();
 
-  const port = process.env.PORT || 4004;
-  await app.listen(port);
+  await app.listen(httpPort);
   logger.log(
-    `Notifications Service is listening on port ${port} (HTTP) and consuming RabbitMQ messages`,
+    `Notifications Service is listening on port ${httpPort} (HTTP) and consuming RabbitMQ messages`,
   );
 }
 bootstrap();

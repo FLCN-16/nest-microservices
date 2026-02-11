@@ -6,11 +6,16 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
 jobs:
   build:
     name: Build, Lint, and Test
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 15
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -21,7 +26,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      
+
       - name: Install pnpm
         uses: pnpm/action-setup@v3
         with:
@@ -49,3 +54,10 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Test
+        run: pnpm test --if-present
+        env:
+          NODE_ENV: test
+          JWT_SECRET: ci-test-secret
+          GATEWAY_SECRET: ci-test-gateway-secret

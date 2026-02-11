@@ -27,7 +27,7 @@ backend/
 | **Auth** | 4001 / 5001 | Postgres | User management, Authentication (JWT), Authorization (CASL). |
 | **Feed** | 4002 / 5002 | Postgres | Post creation, Home feed generation, Comments, Reactions. |
 | **Media** | 4003 / 5003 | S3/MinIO | Handles file uploads (Images/Videos) and strict validation. |
-| **Notifications** | - / - | - | Handles dispatching notifications via RabbitMQ. |
+| **Notifications** | 4004 / - | Postgres | Handles dispatching notifications via RabbitMQ. Provides HTTP endpoints for in-app notifications. |
 
 ## 🔗 Communication Patterns
 

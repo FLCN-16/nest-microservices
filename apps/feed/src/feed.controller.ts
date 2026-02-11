@@ -7,13 +7,24 @@ import {
   ClassSerializerInterceptor,
   UseGuards,
 } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { FeedService } from './feed.service';
 import { PostDto } from './dto/post.dto';
 import { TcpAuthGuard } from '@the-falcon/common';
 
 @Controller('feed') // Prefix combined with versioning -> /v1/feed
 export class FeedController {
-  constructor(private readonly feedService: FeedService) {}
+  constructor(private readonly feedService: FeedService) { }
+
+  @Get('/health')
+  healthCheck() {
+    return { status: 'ok', service: 'feed', timestamp: new Date().toISOString() };
+  }
+
+  @MessagePattern({ cmd: 'health' })
+  tcpHealthCheck() {
+    return { status: 'ok', service: 'feed' };
+  }
 
   @Get()
   @UseGuards(TcpAuthGuard('read', 'feed'))

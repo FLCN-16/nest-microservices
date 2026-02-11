@@ -7,11 +7,11 @@ import { IUser } from '@the-falcon/types';
 
 @Controller()
 export class NotificationsController {
-  constructor(private readonly notificationsService: NotificationsService) {}
+  constructor(private readonly notificationsService: NotificationsService) { }
 
   @Get('health')
   healthCheck() {
-    return 'OK';
+    return { status: 'ok', service: 'notifications', timestamp: new Date().toISOString() };
   }
 
   @EventPattern('send_notification')

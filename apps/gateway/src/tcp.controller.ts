@@ -8,6 +8,11 @@ export class TcpController {
     console.log('TcpController instantiated');
   }
 
+  @MessagePattern({ cmd: 'health' })
+  healthCheck() {
+    return { status: 'ok', service: 'gateway' };
+  }
+
   @MessagePattern('ping')
   ping() {
     console.log('TCP Controller received ping');

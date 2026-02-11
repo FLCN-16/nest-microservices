@@ -30,8 +30,14 @@ The **Notifications Service** manages the dispatch and persistence of user alert
 
 | Environment Variable | Description |
 |----------------------|-------------|
-| `DATABASE_URL` | Postgres connection string |
-| `RABBITMQ_URL` | AMQP connection string (if using RMQ transport) |
+| `NOTIFICATIONS_DB_HOST` | Postgres host (default: localhost) |
+| `NOTIFICATIONS_DB_PORT` | Postgres port (default: 5432) |
+| `NOTIFICATIONS_DB_USER` | Postgres username |
+| `NOTIFICATIONS_DB_PASSWORD` | Postgres password |
+| `NOTIFICATIONS_DB_NAME` | Postgres database name |
+| `RABBITMQ_URL` | AMQP connection string (default: amqp://guest:guest@localhost:5672) |
+| `PORT` | HTTP port (default: 4004) |
+| `ALLOWED_ORIGINS` | Comma-separated CORS origins |
 
 ## 📦 Dependencies
 - `@nestjs/microservices`

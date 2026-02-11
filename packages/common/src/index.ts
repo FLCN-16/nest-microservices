@@ -19,3 +19,6 @@ export * from "./tcp/tcp-client.service";
 export * from "./tcp/tcp-client.module";
 
 export * from "./auth/casl/casl.module";
+
+export * from "./filters/all-exceptions.filter";
+export * from "./interceptors/logging.interceptor";

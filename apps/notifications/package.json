@@ -1,6 +1,6 @@
 {
   "name": "notifications",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "nest build",
@@ -12,17 +12,19 @@
     "test": "jest"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.12",
+    "@nestjs/common": "^11.1.13",
     "@nestjs/config": "^4.0.2",
-    "@nestjs/core": "^11.1.12",
-    "@nestjs/microservices": "^11.1.12",
+    "@nestjs/core": "^11.1.13",
+    "@nestjs/microservices": "^11.1.13",
+    "@nestjs/platform-express": "11.1.13",
     "@nestjs/typeorm": "^11.0.0",
     "@the-falcon/common": "workspace:*",
     "@the-falcon/notifications": "workspace:*",
     "@the-falcon/types": "workspace:*",
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.5",
-    "pg": "^8.17.2",
+    "joi": "^18.0.2",
+    "pg": "^8.18.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "typeorm": "^0.3.28"
@@ -30,8 +32,8 @@
   "devDependencies": {
     "@nestjs/cli": "^11.0.16",
     "@nestjs/schematics": "^11.0.9",
-    "@nestjs/testing": "^11.1.12",
-    "@types/node": "^25.0.9",
+    "@nestjs/testing": "^11.1.13",
+    "@types/node": "^25.2.1",
     "globals": "^17.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
